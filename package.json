@@ -17,7 +17,7 @@
   "scripts": {
     "start": "electron-vite preview",
     "predev": "run-s clean:dev",
-    "dev": "cross-env NODE_ENV=development electron-vite dev --watch",
+    "dev": "pnpm db:generate && cross-env NODE_ENV=development electron-vite dev --watch",
     "compile:app": "electron-vite build",
     "compile:packageJSON": "tsx ./src/lib/electron-app/release/modules/prebuild.ts",
     "prebuild": "run-s clean:dev compile:app compile:packageJSON",
@@ -28,7 +28,8 @@
     "release": "electron-builder --publish always",
     "clean:dev": "rimraf ./node_modules/.dev",
     "lint": "biome check --no-errors-on-unmatched",
-    "lint:fix": "biome check --write --no-errors-on-unmatched --assist-enabled=true"
+    "lint:fix": "biome check --write --no-errors-on-unmatched --assist-enabled=true",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -38,6 +39,7 @@
     "better-sqlite3": "^12.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.44.7",
     "electron-router-dom": "^2.1.0",
     "lucide-react": "^0.541.0",
     "react": "^19.1.1",

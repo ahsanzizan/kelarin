@@ -5,11 +5,12 @@ import {
   REACT_DEVELOPER_TOOLS,
 } from "electron-extension-installer";
 
-import { initializeAuthStore } from "main/auth/database";
-import { registerAuthIpcHandlers } from "main/auth/ipc";
+import { runMigrations } from "main/database/migrate";
 import { ENVIRONMENT, PLATFORM } from "shared/constants";
 import { makeAppId } from "shared/utils";
 import { ignoreConsoleWarnings } from "../../utils/ignore-console-warnings";
+import { registerAuthIpcHandlers } from "./ipcs/auth.ipc";
+import { registerScreenModeIpcHandlers } from "./ipcs/screen-mode.ipc";
 
 ignoreConsoleWarnings(["Manifest version 2 is deprecated"]);
 
@@ -22,8 +23,7 @@ export async function makeAppSetup(createWindow: () => Promise<BrowserWindow>) {
     });
   }
 
-  initializeAuthStore();
-  registerAuthIpcHandlers();
+  runMigrations();
 
   let window = await createWindow();
 
@@ -49,23 +49,8 @@ export async function makeAppSetup(createWindow: () => Promise<BrowserWindow>) {
   app.on("window-all-closed", () => !PLATFORM.IS_MAC && app.quit());
 
   // IPC exposed functions
-  ipcMain.on("switch-to-sticky-mode", () => {
-    if (!window) return;
-    window.setAlwaysOnTop(true, "screen-saver");
-    window.setSize(320, 420);
-    window.setMinimumSize(250, 300);
-    window.setResizable(true);
-    window.setSkipTaskbar(true);
-  });
-
-  ipcMain.on("switch-to-general-mode", () => {
-    if (!window) return;
-    window.setAlwaysOnTop(false);
-    window.setSize(1024, 700);
-    window.setMinimumSize(600, 400);
-    window.setResizable(true);
-    window.setSkipTaskbar(false);
-  });
+  registerAuthIpcHandlers();
+  registerScreenModeIpcHandlers(window);
 
   return window;
 }

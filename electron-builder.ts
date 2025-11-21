@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noTemplateCurlyInString: <> */
-import type { Configuration } from 'electron-builder'
+import type { Configuration } from "electron-builder";
 
 import {
   author as _author,
@@ -8,14 +8,14 @@ import {
   name,
   resources,
   version,
-} from './package.json'
+} from "./package.json";
 
-const author = _author?.name ?? _author
-const currentYear = new Date().getFullYear()
-const authorInKebabCase = author.replace(/\s+/g, '-')
-const appId = `com.${authorInKebabCase}.${name}`.toLowerCase()
+const author = _author?.name ?? _author;
+const currentYear = new Date().getFullYear();
+const authorInKebabCase = author.replace(/\s+/g, "-");
+const appId = `com.${authorInKebabCase}.${name}`.toLowerCase();
 
-const artifactName = [`${name}-v${version}`, '-${os}.${ext}'].join('')
+const artifactName = [`${name}-v${version}`, "-${os}.${ext}"].join("");
 
 export default {
   appId,
@@ -25,20 +25,27 @@ export default {
   mac: {
     artifactName,
     icon: `${resources}/build/icons/icon.icns`,
-    category: 'public.app-category.utilities',
-    target: ['zip', 'dmg', 'dir'],
+    category: "public.app-category.utilities",
+    target: ["zip", "dmg", "dir"],
   },
 
   linux: {
     artifactName,
-    category: 'Utilities',
+    category: "Utilities",
     synopsis: description,
-    target: ['AppImage', 'deb', 'pacman', 'freebsd', 'rpm'],
+    target: ["AppImage", "deb", "pacman", "freebsd", "rpm"],
   },
 
   win: {
     artifactName,
     icon: `${resources}/build/icons/icon.ico`,
-    target: ['zip', 'portable'],
+    target: ["zip", "portable"],
   },
-} satisfies Configuration
+
+  extraResources: [
+    {
+      from: "drizzle",
+      to: "drizzle",
+    },
+  ],
+} satisfies Configuration;

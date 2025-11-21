@@ -1,5 +1,4 @@
 import { ipcMain } from "electron";
-
 import {
   CredentialsPayload,
   IpcHandlerPayload,
@@ -10,13 +9,9 @@ import {
   loginLocalAccount,
   logoutLocalAccount,
   registerLocalAccount,
-} from "./service";
-
-let isRegistered = false;
+} from "../services/auth.service";
 
 export function registerAuthIpcHandlers() {
-  if (isRegistered) return;
-
   ipcMain.handle(
     "auth:register",
     async (
@@ -94,6 +89,4 @@ export function registerAuthIpcHandlers() {
       }
     }
   );
-
-  isRegistered = true;
 }
