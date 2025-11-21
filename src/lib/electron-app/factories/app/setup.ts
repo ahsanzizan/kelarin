@@ -5,9 +5,11 @@ import {
   REACT_DEVELOPER_TOOLS,
 } from "electron-extension-installer";
 
-import { ignoreConsoleWarnings } from "../../utils/ignore-console-warnings";
-import { PLATFORM, ENVIRONMENT } from "shared/constants";
+import { initializeAuthStore } from "main/auth/database";
+import { registerAuthIpcHandlers } from "main/auth/ipc";
+import { ENVIRONMENT, PLATFORM } from "shared/constants";
 import { makeAppId } from "shared/utils";
+import { ignoreConsoleWarnings } from "../../utils/ignore-console-warnings";
 
 ignoreConsoleWarnings(["Manifest version 2 is deprecated"]);
 
@@ -19,6 +21,9 @@ export async function makeAppSetup(createWindow: () => Promise<BrowserWindow>) {
       },
     });
   }
+
+  initializeAuthStore();
+  registerAuthIpcHandlers();
 
   let window = await createWindow();
 
