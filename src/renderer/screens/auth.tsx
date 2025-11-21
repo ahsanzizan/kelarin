@@ -13,15 +13,12 @@ import {
   FormMessage,
 } from "renderer/components/ui/form";
 import { Input } from "renderer/components/ui/input";
+import { useLocalSession } from "renderer/hooks/use-local-session";
 import { cn } from "renderer/lib/utils";
 import { SessionSnapshot } from "shared/types";
 import { z } from "zod";
 
 const { App } = window;
-
-interface AuthFormScreenProps {
-  onSessionChange: (session: SessionSnapshot) => void;
-}
 
 const authSchema = z.object({
   username: z
@@ -37,13 +34,10 @@ const authSchema = z.object({
 
 type AuthFormValues = z.infer<typeof authSchema>;
 
-interface AuthFormScreenProps {
-  onSessionChange: (session: SessionSnapshot) => void;
-}
-
-export function AuthFormScreen({ onSessionChange }: AuthFormScreenProps) {
+export function AuthScreen() {
   const [mode, setMode] = useState<"register" | "login">("login");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { applySession } = useLocalSession();
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
@@ -67,7 +61,7 @@ export function AuthFormScreen({ onSessionChange }: AuthFormScreenProps) {
         return;
       }
 
-      onSessionChange(snapshot.data!);
+      applySession(snapshot.data!);
       form.reset();
     } catch (error) {
       setErrorMessage(
