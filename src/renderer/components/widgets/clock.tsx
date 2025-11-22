@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import type { ReactNode } from 'react'
 
 export function Clock({
   clock,
 }: {
-  clock: { hours: string[]; minutes: string[]; seconds: string[] };
+  clock: { hours: string[]; minutes: string[]; seconds: string[] }
 }) {
   return (
     <div className="flex items-center justify-between">
@@ -22,15 +22,15 @@ export function Clock({
         <Digit>{clock.seconds[1]}</Digit>
       </DigitsContainer>
     </div>
-  );
+  )
 }
 
 function Colon() {
-  return <span className="font-semibold">:</span>;
+  return <span className="font-semibold">:</span>
 }
 
 function DigitsContainer({ children }: { children?: ReactNode }) {
-  return <div className="flex items-center gap-x-1">{children}</div>;
+  return <div className="flex items-center gap-x-1">{children}</div>
 }
 
 function Digit({ children }: { children?: ReactNode }) {
@@ -38,5 +38,5 @@ function Digit({ children }: { children?: ReactNode }) {
     <span className="text-3xl p-2 bg-white/10 rounded font-bold">
       {children}
     </span>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import { CalendarClock, Circle, Hourglass } from "lucide-react";
-import { ReactNode } from "react";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "../ui/item";
+import { CalendarClock, Hourglass } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Item, ItemContent, ItemTitle } from '../ui/item'
 
 export function TaskItem() {
   return (
     <Item
-      variant="default"
-      size="sm"
-      className="bg-white/5 hover:bg-white/10"
       asChild
+      className="bg-white/5 hover:bg-white/10"
+      size="sm"
+      variant="default"
     >
       <button
-        type="button"
         onClick={() => {
           // navigate("");
         }}
+        type="button"
       >
         <ItemContent>
           <ItemTitle className="">Your profile has been verified.</ItemTitle>
@@ -29,9 +29,9 @@ export function TaskItem() {
         </div>
       </button>
     </Item>
-  );
+  )
 }
 
 function TaskOrnament({ children }: { children?: ReactNode }) {
-  return <p className="flex items-center text-xs">{children}</p>;
+  return <p className="flex items-center text-xs">{children}</p>
 }

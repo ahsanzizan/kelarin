@@ -1,16 +1,16 @@
 // THIS IS A TESTING PAGE
-import { Shield, Terminal } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Shield, Terminal } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "renderer/components/ui/alert";
-import { Button } from "renderer/components/ui/button";
+} from 'renderer/components/ui/alert'
+import { Button } from 'renderer/components/ui/button'
 
 export function PrivacyScreen() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <main className="flex h-screen items-center justify-center bg-black px-6">
@@ -52,12 +52,12 @@ export function PrivacyScreen() {
         </Alert>
 
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <Button variant="outline" onClick={() => navigate(-1)}>
+          <Button onClick={() => navigate(-1)} variant="outline">
             Go back
           </Button>
-          <Button onClick={() => navigate("/")}>Return to dashboard</Button>
+          <Button onClick={() => navigate('/')}>Return to dashboard</Button>
         </div>
       </section>
     </main>
-  );
+  )
 }

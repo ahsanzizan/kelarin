@@ -1,48 +1,36 @@
-import { format } from "date-fns";
-import {
-  BadgeCheckIcon,
-  BadgeIcon,
-  ChevronRightIcon,
-  Rocket,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemMedia,
-  ItemTitle,
-} from "../ui/item";
+import { format } from 'date-fns'
+import { Rocket } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '../ui/button'
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-} from "../ui/sidebar";
-import { Clock } from "./clock";
-import { useNavigate } from "react-router-dom";
-import { TaskItem } from "./task";
+} from '../ui/sidebar'
+import { Clock } from './clock'
+import { TaskItem } from './task'
 
-const pad = (n: number) => String(n).padStart(2, "0").split("");
+const pad = (n: number) => String(n).padStart(2, '0').split('')
 
 export function Sidebar() {
-  const navigate = useNavigate();
-  const [now, setNow] = useState(new Date());
+  const navigate = useNavigate()
+  const [now, setNow] = useState(new Date())
 
   const clock = {
     hours: pad(now.getHours()),
     minutes: pad(now.getMinutes()),
     seconds: pad(now.getSeconds()),
-  };
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+      setNow(new Date())
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <ShadcnSidebar>
@@ -61,7 +49,7 @@ export function Sidebar() {
         <SidebarGroup>
           <div className="border-white/10 bg-white/5 p-6 rounded-xl">
             <h2 className="text-base font-semibold mb-3">
-              {format(now, "EEEE, MMMM do yyyy")}
+              {format(now, 'EEEE, MMMM do yyyy')}
             </h2>
             <Clock clock={clock} />
           </div>
@@ -80,7 +68,7 @@ export function Sidebar() {
                 <TaskItem />
               </li>
               <li>
-                <Button variant={"link"} className="w-full">
+                <Button className="w-full" variant={'link'}>
                   +4 More Tasks
                 </Button>
               </li>
@@ -93,5 +81,5 @@ export function Sidebar() {
       </SidebarContent>
       <SidebarFooter />
     </ShadcnSidebar>
-  );
+  )
 }

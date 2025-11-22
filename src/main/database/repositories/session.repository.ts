@@ -1,8 +1,8 @@
-import { eq, sql } from "drizzle-orm";
-import { getDb, schema } from "../index";
-import type { Session } from "../schema/";
+import { eq, sql } from 'drizzle-orm'
+import { getDb, schema } from '../index'
+import type { Session } from '../schema/'
 
-const SESSION_ID = 1;
+const SESSION_ID = 1
 
 export const sessionRepository = {
   get(): Session | undefined {
@@ -10,7 +10,7 @@ export const sessionRepository = {
       .select()
       .from(schema.sessions)
       .where(eq(schema.sessions.id, SESSION_ID))
-      .get();
+      .get()
   },
 
   setUser(userId: number): void {
@@ -21,7 +21,7 @@ export const sessionRepository = {
         establishedAt: sql`CURRENT_TIMESTAMP`,
       })
       .where(eq(schema.sessions.id, SESSION_ID))
-      .run();
+      .run()
   },
 
   clear(): void {
@@ -29,6 +29,6 @@ export const sessionRepository = {
       .update(schema.sessions)
       .set({ userId: null, establishedAt: null })
       .where(eq(schema.sessions.id, SESSION_ID))
-      .run();
+      .run()
   },
-};
+}

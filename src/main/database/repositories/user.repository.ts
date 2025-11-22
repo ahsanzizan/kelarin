@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
-import { getDb, schema } from "../index";
-import type { NewUser, User } from "../schema/";
+import { eq } from 'drizzle-orm'
+import { getDb, schema } from '../index'
+import type { NewUser, User } from '../schema/'
 
 export const userRepository = {
   findById(id: number): User | undefined {
@@ -8,7 +8,7 @@ export const userRepository = {
       .select()
       .from(schema.users)
       .where(eq(schema.users.id, id))
-      .get();
+      .get()
   },
 
   findByUsername(username: string): User | undefined {
@@ -16,14 +16,14 @@ export const userRepository = {
       .select()
       .from(schema.users)
       .where(eq(schema.users.username, username))
-      .get();
+      .get()
   },
 
   create(data: NewUser): User {
-    return getDb().insert(schema.users).values(data).returning().get();
+    return getDb().insert(schema.users).values(data).returning().get()
   },
 
   delete(id: number): void {
-    getDb().delete(schema.users).where(eq(schema.users.id, id)).run();
+    getDb().delete(schema.users).where(eq(schema.users.id, id)).run()
   },
-};
+}

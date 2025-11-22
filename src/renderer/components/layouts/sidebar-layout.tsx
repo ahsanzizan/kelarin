@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
-import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
-import { Sidebar } from "../widgets/sidebar";
+import type { ReactNode } from 'react'
+import { SidebarProvider, SidebarTrigger } from '../ui/sidebar'
+import { Sidebar } from '../widgets/sidebar'
 
 export function SidebarLayout({
   children,
   className,
 }: {
-  children?: ReactNode;
-  className?: string;
+  children?: ReactNode
+  className?: string
 }) {
   return (
     <SidebarProvider>
@@ -17,5 +17,5 @@ export function SidebarLayout({
         {children}
       </main>
     </SidebarProvider>
-  );
+  )
 }

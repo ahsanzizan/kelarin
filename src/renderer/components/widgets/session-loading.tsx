@@ -1,4 +1,4 @@
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react'
 
 export function SessionLoading() {
   return (
@@ -8,5 +8,5 @@ export function SessionLoading() {
         <p>Decrypting your session…</p>
       </div>
     </main>
-  );
+  )
 }
