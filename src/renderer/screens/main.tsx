@@ -5,8 +5,7 @@ import { SessionLoading } from 'renderer/components/widgets/session-loading'
 import { useLocalSession } from '../hooks/use-local-session'
 
 export function MainScreen() {
-  const { session, isLoading, isProcessing, error, logout, applySession } =
-    useLocalSession()
+  const { session, isLoading } = useLocalSession()
 
   if (isLoading) {
     return <SessionLoading />
