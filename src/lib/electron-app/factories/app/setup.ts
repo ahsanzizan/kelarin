@@ -11,6 +11,7 @@ import { makeAppId } from 'shared/utils'
 import { ignoreConsoleWarnings } from '../../utils/ignore-console-warnings'
 import { registerAuthIpcHandlers } from './ipcs/auth.ipc'
 import { registerScreenModeIpcHandlers } from './ipcs/screen-mode.ipc'
+import { registerBoardIpcHandlers } from './ipcs/board.ipc'
 
 ignoreConsoleWarnings(['Manifest version 2 is deprecated'])
 
@@ -51,6 +52,7 @@ export async function makeAppSetup(createWindow: () => Promise<BrowserWindow>) {
   // IPC exposed functions
   registerAuthIpcHandlers()
   registerScreenModeIpcHandlers(window)
+  registerBoardIpcHandlers()
 
   return window
 }

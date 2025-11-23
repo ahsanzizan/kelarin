@@ -1,47 +1,60 @@
-import { contextBridge, ipcRenderer } from 'electron'
-import type { IpcHandlerPayload } from 'shared/types'
+import { contextBridge, ipcRenderer } from "electron";
+import type { Board } from "main/database/schema";
+import type { IpcHandlerPayload } from "shared/types";
 
 declare global {
   interface Window {
-    App: typeof API
+    App: typeof API;
   }
 }
 
 type CredentialsPayload = {
-  username: string
-  password: string
-}
+  username: string;
+  password: string;
+};
 
 type SessionSnapshot = {
-  isAuthenticated: boolean
+  isAuthenticated: boolean;
   user: {
-    id: number
-    username: string
-    createdAt: string
-  } | null
-}
+    id: number;
+    username: string;
+    createdAt: string;
+  } | null;
+};
 
 const API = {
   log: (message?: any) => console.log(message),
-  username: process.env.USER,
 
-  // IPC exposed functions
-  switchToStickyMode: () => ipcRenderer.send('switch-to-sticky-mode'),
-  switchToGeneralMode: () => ipcRenderer.send('switch-to-general-mode'),
+  // Screens
+  screen: {
+    switchToStickyMode: () => ipcRenderer.send("switch-to-sticky-mode"),
+    switchToGeneralMode: () => ipcRenderer.send("switch-to-general-mode"),
+    minimize: () => ipcRenderer.send("window:minimize"),
+    maximize: () => ipcRenderer.send("window:maximize"),
+    close: () => ipcRenderer.send("window:close"),
+  },
 
   // Authentications
-  register: (
-    payload: CredentialsPayload
-  ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-    ipcRenderer.invoke('auth:register', payload),
-  login: (
-    payload: CredentialsPayload
-  ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-    ipcRenderer.invoke('auth:login', payload),
-  getSession: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-    ipcRenderer.invoke('auth:get-session'),
-  logout: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-    ipcRenderer.invoke('auth:logout'),
-}
+  auth: {
+    register: (
+      payload: CredentialsPayload
+    ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
+      ipcRenderer.invoke("auth:register", payload),
+    login: (
+      payload: CredentialsPayload
+    ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
+      ipcRenderer.invoke("auth:login", payload),
+    getSession: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
+      ipcRenderer.invoke("auth:get-session"),
+    logout: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
+      ipcRenderer.invoke("auth:logout"),
+  },
 
-contextBridge.exposeInMainWorld('App', API)
+  // Boards
+  boards: {
+    getAll: (): Promise<IpcHandlerPayload<Board[]>> =>
+      ipcRenderer.invoke("board:getAll"),
+  },
+};
+
+contextBridge.exposeInMainWorld("App", API);

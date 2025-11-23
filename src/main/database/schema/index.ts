@@ -1,2 +1,5 @@
+export * from './board.schema'
 export * from './session.schema'
+export * from './subtask.schema'
+export * from './task.schema'
 export * from './user.schema'

@@ -1,9 +1,9 @@
-import { Route } from 'react-router-dom'
+import { Route } from "react-router-dom";
 
-import { Router } from 'lib/electron-router-dom'
+import { Router } from "lib/electron-router-dom";
 
-import { AuthScreen } from './screens/auth'
-import { MainScreen } from './screens/main'
+import { AuthScreen } from "./screens/auth";
+import { MainScreen } from "./screens/main";
 
 export function AppRoutes() {
   return (
@@ -15,5 +15,5 @@ export function AppRoutes() {
         </>
       }
     />
-  )
+  );
 }
