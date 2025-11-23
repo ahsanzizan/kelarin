@@ -1,56 +1,56 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom'
 
-import { Search } from "lucide-react";
-import { useMemo } from "react";
-import { SidebarLayout } from "renderer/components/layouts/sidebar.layout";
-import { Button } from "renderer/components/ui/button";
-import { SessionLoading } from "renderer/components/widgets/session-loading";
-import { useBoards } from "renderer/data/board/use-boards";
-import { useLocalSession } from "../hooks/use-local-session";
+import { Search } from 'lucide-react'
+import { useMemo } from 'react'
+import { SidebarLayout } from 'renderer/components/layouts/sidebar.layout'
+import { Button } from 'renderer/components/ui/button'
+import { SessionLoading } from 'renderer/components/widgets/session-loading'
+import { useBoards } from 'renderer/data/board/use-boards'
+import { useLocalSession } from '../hooks/use-local-session'
 
 export function MainScreen() {
-  const { session, isLoading: isSessionLoading } = useLocalSession();
-  const { data, isLoading } = useBoards();
+  const { session, isLoading: isSessionLoading } = useLocalSession()
+  const { data, isLoading } = useBoards()
 
   const greeting = useMemo(() => {
-    const hour = new Date().getHours();
+    const hour = new Date().getHours()
 
     if (hour < 5) {
       return {
-        title: "Early Start",
-        description: "A calm start leads to a powerful day ahead.",
-      };
+        title: 'Early Start',
+        description: 'A calm start leads to a powerful day ahead.',
+      }
     }
     if (hour < 11) {
       return {
-        title: "Morning",
-        description: "Take charge and make today amazing.",
-      };
+        title: 'Morning',
+        description: 'Take charge and make today amazing.',
+      }
     }
     if (hour < 14) {
       return {
-        title: "Afternoon",
+        title: 'Afternoon',
         description: "Keep the momentum — you're doing great.",
-      };
+      }
     }
     if (hour < 18) {
       return {
-        title: "Evening",
-        description: "Reflect, refocus, and finish strong.",
-      };
+        title: 'Evening',
+        description: 'Reflect, refocus, and finish strong.',
+      }
     }
     return {
-      title: "Night",
-      description: "Late night worker? Remember to rest and recharge.",
-    };
-  }, []);
+      title: 'Night',
+      description: 'Late night worker? Remember to rest and recharge.',
+    }
+  }, [])
 
   if (isSessionLoading) {
-    return <SessionLoading />;
+    return <SessionLoading />
   }
 
   if (!session?.isAuthenticated || !session.user) {
-    return <Navigate to={"/auth"} />;
+    return <Navigate to={'/auth'} />
   }
 
   return (
@@ -64,15 +64,15 @@ export function MainScreen() {
             <p className="text-base text-white/50">{greeting.description}</p>
           </div>
           <div className="flex items-center gap-x-3 bg-white/5 rounded-lg p-2">
-            <Button size={"sm"}>Start & Contribute!</Button>
-            <Button size={"icon-sm"} variant={"secondary"}>
+            <Button size={'sm'}>Start & Contribute!</Button>
+            <Button size={'icon-sm'} variant={'secondary'}>
               <Search />
             </Button>
-            <Button size={"icon-sm"} variant={"secondary"}></Button>
-            <Button size={"icon-sm"} variant={"secondary"}></Button>
+            <Button size={'icon-sm'} variant={'secondary'}></Button>
+            <Button size={'icon-sm'} variant={'secondary'}></Button>
           </div>
         </div>
       </section>
     </SidebarLayout>
-  );
+  )
 }

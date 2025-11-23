@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query'
 
-const { App } = window;
+const { App } = window
 
 export function useBoards() {
   return useQuery({
-    queryKey: ["boards"],
+    queryKey: ['boards'],
     queryFn: () => App.boards.getAll(),
-  });
+  })
 }
