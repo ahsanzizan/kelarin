@@ -6,9 +6,9 @@ import type {
 } from 'shared/types'
 import {
   getCurrentSession,
-  loginLocalAccount,
-  logoutLocalAccount,
-  registerLocalAccount,
+  login,
+  logout,
+  register,
 } from '../services/auth.service'
 
 export function registerAuthIpcHandlers() {
@@ -19,7 +19,7 @@ export function registerAuthIpcHandlers() {
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = registerLocalAccount(payload)
+        const data = register(payload)
         return { ok: true, data }
       } catch (error) {
         return {
@@ -40,7 +40,7 @@ export function registerAuthIpcHandlers() {
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = loginLocalAccount(payload)
+        const data = login(payload)
         return { ok: true, data }
       } catch (error) {
         return {
@@ -76,7 +76,7 @@ export function registerAuthIpcHandlers() {
     'auth:logout',
     async (): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = logoutLocalAccount()
+        const data = logout()
         return { ok: true, data }
       } catch (error) {
         return {

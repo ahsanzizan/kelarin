@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { Alert, AlertDescription } from 'renderer/components/ui/alert'
 import { Button } from 'renderer/components/ui/button'
 import {
@@ -13,7 +14,8 @@ import {
   FormMessage,
 } from 'renderer/components/ui/form'
 import { Input } from 'renderer/components/ui/input'
-import { useLocalSession } from 'renderer/hooks/use-local-session'
+import { useAuth } from 'renderer/data/auth/use-auth'
+import { useSession } from 'renderer/data/auth/use-session'
 import { cn } from 'renderer/lib/utils'
 import { z } from 'zod'
 
@@ -36,7 +38,9 @@ type AuthFormValues = z.infer<typeof authSchema>
 export function AuthScreen() {
   const [mode, setMode] = useState<'register' | 'login'>('login')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const { applySession } = useLocalSession()
+  const { mutate, isPending } = useAuth()
+  const { data: session } = useSession()
+  const navigate = useNavigate()
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
@@ -49,26 +53,21 @@ export function AuthScreen() {
   async function onSubmit(values: AuthFormValues) {
     setErrorMessage(null)
 
-    try {
-      const snapshot =
-        mode === 'register'
-          ? await App.auth.register(values)
-          : await App.auth.login(values)
-
-      if (snapshot.error !== undefined) {
-        setErrorMessage(snapshot.error)
-        return
+    mutate(
+      { ...values, mode },
+      {
+        onError: error =>
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : 'Unexpected issue — try again.'
+          ),
+        onSuccess: () => {
+          form.reset()
+          navigate('/')
+        },
       }
-
-      applySession(snapshot.data!)
-      form.reset()
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "We couldn't finish that request. Please try again."
-      )
-    }
+    )
   }
 
   function toggleMode() {
@@ -173,6 +172,7 @@ export function AuthScreen() {
 
         <div className="w-full mt-4 flex justify-center">
           <Button
+            disabled={isPending}
             onClick={toggleMode}
             size={'sm'}
             type="button"

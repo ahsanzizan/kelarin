@@ -5,11 +5,13 @@ import { useMemo } from 'react'
 import { SidebarLayout } from 'renderer/components/layouts/sidebar.layout'
 import { Button } from 'renderer/components/ui/button'
 import { SessionLoading } from 'renderer/components/widgets/session-loading'
+import { useSession } from 'renderer/data/auth/use-session'
 import { useBoards } from 'renderer/data/board/use-boards'
-import { useLocalSession } from '../hooks/use-local-session'
+import { useLogout } from 'renderer/data/auth/use-logout'
 
 export function MainScreen() {
-  const { session, isLoading: isSessionLoading } = useLocalSession()
+  const { data: session, isLoading: isSessionLoading } = useSession()
+  const { mutate: logout } = useLogout()
   const { data, isLoading } = useBoards()
 
   const greeting = useMemo(() => {
@@ -72,6 +74,13 @@ export function MainScreen() {
             <Button size={'icon-sm'} variant={'secondary'}></Button>
           </div>
         </div>
+        <Button
+          onClick={() => logout()}
+          size={'default'}
+          variant={'destructive'}
+        >
+          Logout
+        </Button>
       </section>
     </SidebarLayout>
   )

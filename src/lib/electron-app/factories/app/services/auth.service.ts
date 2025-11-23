@@ -26,9 +26,7 @@ export function getCurrentSession(): SessionSnapshot {
   return { isAuthenticated: true, user: mapUser(user) }
 }
 
-export function registerLocalAccount(
-  payload: CredentialsPayload
-): SessionSnapshot {
+export function register(payload: CredentialsPayload): SessionSnapshot {
   const { username, password } = sanitizeCredentials(payload)
 
   const existingUser = userRepository.findByUsername(username)
@@ -45,9 +43,7 @@ export function registerLocalAccount(
   return getCurrentSession()
 }
 
-export function loginLocalAccount(
-  payload: CredentialsPayload
-): SessionSnapshot {
+export function login(payload: CredentialsPayload): SessionSnapshot {
   const { username, password } = sanitizeCredentials(payload)
 
   const user = userRepository.findByUsername(username)
@@ -67,7 +63,7 @@ export function loginLocalAccount(
   return getCurrentSession()
 }
 
-export function logoutLocalAccount(): SessionSnapshot {
+export function logout(): SessionSnapshot {
   sessionRepository.clear()
   return { isAuthenticated: false, user: null }
 }
