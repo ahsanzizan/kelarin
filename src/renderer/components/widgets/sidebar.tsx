@@ -9,6 +9,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarSeparator,
 } from '../ui/sidebar'
 import { Clock } from './clock'
 import { TaskItem } from './task'
@@ -34,7 +35,7 @@ export function Sidebar() {
   return (
     <ShadcnSidebar>
       <SidebarHeader className="pt-6">
-        <div className="border-white/10 bg-white/5 p-6 rounded-xl">
+        <div className="bg-secondary p-6 rounded-xl">
           <div className="flex items-end gap-x-2 mb-3">
             <h2 className="text-3xl font-semibold text-white">Kelarin</h2>
             <h3 className="text-sm text-white/60">(v1.0.0)</h3>
@@ -46,7 +47,7 @@ export function Sidebar() {
       </SidebarHeader>
       <SidebarContent className="pt-4">
         <SidebarGroup>
-          <div className="border-white/10 bg-white/5 p-6 rounded-xl">
+          <div className="bg-secondary p-6 rounded-xl">
             <h2 className="text-base font-semibold mb-3">
               {format(now, 'EEEE, MMMM do yyyy')}
             </h2>
@@ -54,17 +55,22 @@ export function Sidebar() {
           </div>
         </SidebarGroup>
         <SidebarGroup>
-          <div className="border-white/10 bg-white/5 p-6 rounded-xl">
-            <h2 className="text-2xl font-semibold mb-3">Today's Tasks</h2>
+          <div className="bg-secondary p-6 rounded-xl">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-semibold">Today's Tasks</h2>
+              <span className="text-xs px-3 font-bold rounded-lg py-1.5 bg-white/15">
+                7 tasks
+              </span>
+            </div>
             <ul className="mb-3 gap-y-1 flex flex-col ">
               <li>
-                <TaskItem />
+                <TaskItem detailed />
               </li>
               <li>
-                <TaskItem />
+                <TaskItem detailed />
               </li>
               <li>
-                <TaskItem />
+                <TaskItem detailed />
               </li>
               <li>
                 <Button className="w-full" variant={'link'}>

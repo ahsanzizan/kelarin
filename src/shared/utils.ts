@@ -15,3 +15,10 @@ const appId = `com.${authorInKebabCase}.${name}`.toLowerCase()
 export function makeAppId(id: string = appId): string {
   return id
 }
+
+export function truncateString(str: string, maxLength: number) {
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength - 3) + '...'
+  }
+  return str
+}

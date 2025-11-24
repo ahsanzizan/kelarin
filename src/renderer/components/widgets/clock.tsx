@@ -34,9 +34,5 @@ function DigitsContainer({ children }: { children?: ReactNode }) {
 }
 
 function Digit({ children }: { children?: ReactNode }) {
-  return (
-    <span className="text-3xl p-2 bg-white/10 rounded font-bold">
-      {children}
-    </span>
-  )
+  return <span className="text-5xl rounded font-bold">{children}</span>
 }

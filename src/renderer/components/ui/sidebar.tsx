@@ -1,12 +1,10 @@
 'use client'
 
-import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
+import * as React from 'react'
 
-import { useIsMobile } from 'renderer/hooks/use-mobile'
-import { cn } from 'renderer/lib/utils'
 import { Button } from 'renderer/components/ui/button'
 import { Input } from 'renderer/components/ui/input'
 import { Separator } from 'renderer/components/ui/separator'
@@ -24,6 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'renderer/components/ui/tooltip'
+import { useIsMobile } from 'renderer/hooks/use-mobile'
+import { cn } from 'renderer/lib/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -131,7 +131,7 @@ function SidebarProvider({
       <TooltipProvider delayDuration={0}>
         <div
           className={cn(
-            'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full',
+            'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-[calc(100vh-2rem)] w-full',
             className
           )}
           data-slot="sidebar-wrapper"

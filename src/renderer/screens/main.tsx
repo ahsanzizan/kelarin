@@ -4,10 +4,14 @@ import { Search } from 'lucide-react'
 import { useMemo } from 'react'
 import { SidebarLayout } from 'renderer/components/layouts/sidebar.layout'
 import { Button } from 'renderer/components/ui/button'
+import {
+  BoardCard,
+  NewBoardCard,
+} from 'renderer/components/widgets/board/board-card'
 import { SessionLoading } from 'renderer/components/widgets/session-loading'
+import { useLogout } from 'renderer/data/auth/use-logout'
 import { useSession } from 'renderer/data/auth/use-session'
 import { useBoards } from 'renderer/data/board/use-boards'
-import { useLogout } from 'renderer/data/auth/use-logout'
 
 export function MainScreen() {
   const { data: session, isLoading: isSessionLoading } = useSession()
@@ -65,22 +69,35 @@ export function MainScreen() {
             </h1>
             <p className="text-base text-white/50">{greeting.description}</p>
           </div>
-          <div className="flex items-center gap-x-3 bg-white/5 rounded-lg p-2">
-            <Button size={'sm'}>Start & Contribute!</Button>
-            <Button size={'icon-sm'} variant={'secondary'}>
+          <div className="flex items-center gap-x-3 bg-secondary rounded-lg p-2">
+            <Button size={'sm'}>Star & Contribute!</Button>
+            <Button size={'icon-sm'} variant={'ghost'}>
               <Search />
             </Button>
-            <Button size={'icon-sm'} variant={'secondary'}></Button>
-            <Button size={'icon-sm'} variant={'secondary'}></Button>
+            <Button size={'icon-sm'} variant={'ghost'}></Button>
+            <Button size={'icon-sm'} variant={'ghost'}></Button>
           </div>
         </div>
-        <Button
-          onClick={() => logout()}
-          size={'default'}
-          variant={'destructive'}
-        >
-          Logout
-        </Button>
+        <div className="mt-10">
+          <h2 className="text-lg font-bold text-white">Your Boards</h2>
+          <ul className="grid grid-cols-4 gap-6 mt-5">
+            <li>
+              <BoardCard board={{ tasks: [1] }} />
+            </li>
+            <li>
+              <BoardCard board={{ tasks: [1, 2] }} />
+            </li>
+            <li>
+              <BoardCard board={{ tasks: [1, 2, 3] }} />
+            </li>
+            <li>
+              <BoardCard board={{ tasks: [] }} />
+            </li>
+            <li>
+              <NewBoardCard />
+            </li>
+          </ul>
+        </div>
       </section>
     </SidebarLayout>
   )

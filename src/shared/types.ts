@@ -38,3 +38,13 @@ export interface IpcHandlerPayload<T> {
   data?: T
   error?: string
 }
+
+export interface Board {
+  id: number
+  title: string
+  description: string
+  isArchived: boolean
+  color: string
+  createdAt: string
+  user: number | null
+}
