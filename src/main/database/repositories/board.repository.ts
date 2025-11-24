@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, not } from "drizzle-orm";
 import { DatabaseError } from "shared/errors";
 import { getDb, schema } from "../index";
 import { Task } from "../schema";
@@ -163,6 +163,7 @@ export class BoardRepository {
         with: {
           tasks: {
             limit: tasksPerBoard,
+            where: not(eq(schema.tasks.state, "done")),
             orderBy: (tasks, { desc }) => [desc(tasks.createdAt)],
           },
         },

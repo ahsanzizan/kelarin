@@ -2,10 +2,8 @@ import { Search } from "lucide-react";
 import { useMemo } from "react";
 import { SidebarLayout } from "renderer/components/layouts/sidebar.layout";
 import { Button } from "renderer/components/ui/button";
-import {
-  BoardCard,
-  NewBoardCard,
-} from "renderer/components/widgets/board/board-card";
+import { BoardCard } from "renderer/components/widgets/board/board-card";
+import { NewBoardCard } from "renderer/components/widgets/board/new-board-card";
 import { useLogout } from "renderer/data/auth/use-logout";
 import { useSession } from "renderer/data/auth/use-session";
 import { useBoards } from "renderer/data/board/use-boards";
