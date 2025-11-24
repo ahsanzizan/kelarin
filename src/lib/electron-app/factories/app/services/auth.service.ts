@@ -1,102 +1,98 @@
-import bcrypt from 'bcryptjs'
-import { sessionRepository } from 'main/database/repositories/session.repository'
-import { userRepository } from 'main/database/repositories/user.repository'
-import type {
-  CredentialsPayload,
-  LocalUser,
-  SessionSnapshot,
-} from 'shared/types'
+import bcrypt from "bcryptjs";
+import { SessionRepository } from "main/database/repositories/session.repository";
+import { UserRepository } from "main/database/repositories/user.repository";
+import type { CredentialsPayload } from "shared/types";
 
-const BCRYPT_ROUNDS = 12
+const BCRYPT_ROUNDS = 12;
 
-export function getCurrentSession(): SessionSnapshot {
-  const session = sessionRepository.get()
+export class AuthService {
+  private readonly userRepo: UserRepository;
+  private readonly sessionRepo: SessionRepository;
 
-  if (!session?.userId) {
-    return { isAuthenticated: false, user: null }
+  constructor() {
+    this.userRepo = new UserRepository();
+    this.sessionRepo = new SessionRepository();
   }
 
-  const user = userRepository.findById(session.userId)
+  async getCurrentSession() {
+    const session = await this.sessionRepo.get();
 
-  if (!user) {
-    sessionRepository.clear()
-    return { isAuthenticated: false, user: null }
+    if (!session?.userId) {
+      return { isAuthenticated: false, user: null };
+    }
+
+    const user = await this.userRepo.findById(session.userId);
+
+    if (!user) {
+      this.sessionRepo.clear();
+      return { isAuthenticated: false, user: null };
+    }
+
+    const { passwordHash, ...mappedUser } = user;
+
+    return { isAuthenticated: true, user: mappedUser };
   }
 
-  return { isAuthenticated: true, user: mapUser(user) }
-}
+  async register(payload: CredentialsPayload) {
+    const { username, password } = this.sanitizeCredentials(payload);
 
-export function register(payload: CredentialsPayload): SessionSnapshot {
-  const { username, password } = sanitizeCredentials(payload)
+    const existingUser = await this.userRepo.findByUsername(username);
 
-  const existingUser = userRepository.findByUsername(username)
+    if (existingUser) {
+      throw new Error("That username is already taken.");
+    }
 
-  if (existingUser) {
-    throw new Error('That username is already taken.')
+    const passwordHash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
+    const user = await this.userRepo.create({ username, passwordHash });
+
+    await this.sessionRepo.setUser(user.id);
+
+    return this.getCurrentSession();
   }
 
-  const passwordHash = bcrypt.hashSync(password, BCRYPT_ROUNDS)
-  const user = userRepository.create({ username, passwordHash })
+  async login(payload: CredentialsPayload) {
+    const { username, password } = this.sanitizeCredentials(payload);
 
-  sessionRepository.setUser(user.id)
+    const user = await this.userRepo.findByUsername(username);
 
-  return getCurrentSession()
-}
+    if (!user) {
+      throw new Error("We couldn't find an account with that username.");
+    }
 
-export function login(payload: CredentialsPayload): SessionSnapshot {
-  const { username, password } = sanitizeCredentials(payload)
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
 
-  const user = userRepository.findByUsername(username)
+    if (!isValidPassword) {
+      throw new Error("Incorrect password.");
+    }
 
-  if (!user) {
-    throw new Error("We couldn't find an account with that username.")
+    this.sessionRepo.setUser(user.id);
+
+    return this.getCurrentSession();
   }
 
-  const isValidPassword = bcrypt.compareSync(password, user.passwordHash)
-
-  if (!isValidPassword) {
-    throw new Error('Incorrect password.')
+  async logout() {
+    this.sessionRepo.clear();
+    return { isAuthenticated: false, user: null };
   }
 
-  sessionRepository.setUser(user.id)
+  private sanitizeCredentials(payload: CredentialsPayload) {
+    const username = payload.username.trim();
+    const password = payload.password.trim();
 
-  return getCurrentSession()
-}
+    if (username.length < 3 || username.length > 48) {
+      throw new Error("Usernames must be between 3 and 48 characters.");
+    }
 
-export function logout(): SessionSnapshot {
-  sessionRepository.clear()
-  return { isAuthenticated: false, user: null }
-}
+    if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
+      throw new Error(
+        "Usernames can only include letters, numbers, dots, underscores, or hyphens."
+      );
+    }
 
-function sanitizeCredentials(payload: CredentialsPayload): CredentialsPayload {
-  const username = payload.username.trim()
-  const password = payload.password.trim()
+    if (password.length < 8) {
+      throw new Error("Passwords must be at least 8 characters long.");
+    }
 
-  if (username.length < 3 || username.length > 48) {
-    throw new Error('Usernames must be between 3 and 48 characters.')
-  }
-
-  if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
-    throw new Error(
-      'Usernames can only include letters, numbers, dots, underscores, or hyphens.'
-    )
-  }
-
-  if (password.length < 8) {
-    throw new Error('Passwords must be at least 8 characters long.')
-  }
-
-  return { username, password }
-}
-
-function mapUser(user: {
-  id: number
-  username: string
-  createdAt: string
-}): LocalUser {
-  return {
-    id: user.id,
-    username: user.username,
-    createdAt: user.createdAt,
+    return { username, password };
   }
 }

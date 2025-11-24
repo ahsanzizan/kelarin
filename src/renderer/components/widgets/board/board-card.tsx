@@ -1,11 +1,12 @@
-import { CheckCircle2, EllipsisVertical, Expand, Plus } from 'lucide-react'
-import { Button } from 'renderer/components/ui/button'
-import { TaskItem } from '../task'
+import { CheckCircle2, EllipsisVertical, Expand, Plus } from "lucide-react";
+import { Button } from "renderer/components/ui/button";
+import { BoardWithTasks } from "shared/types";
+import { TaskItem } from "../task/task";
 
-const OPACITY = ['100', '50', '20']
+const OPACITY = ["100", "50", "20"];
 
-export function BoardCard({ board }: { board: { tasks: number[] } }) {
-  const { tasks } = board
+export function BoardCard({ board }: { board: BoardWithTasks }) {
+  const { tasks } = board;
 
   return (
     <div className="group w-full relative bg-secondary hover:border-white/50 transition-all duration-300 border border-white/15 rounded-lg">
@@ -16,7 +17,7 @@ export function BoardCard({ board }: { board: { tasks: number[] } }) {
           </span>
           <h2 className="text-sm font-bold text-white">Main</h2>
         </div>
-        <Button className="text-white/50" size={'icon-sm'} variant={'ghost'}>
+        <Button className="text-white/50" size={"icon-sm"} variant={"ghost"}>
           <EllipsisVertical />
         </Button>
       </div>
@@ -29,7 +30,7 @@ export function BoardCard({ board }: { board: { tasks: number[] } }) {
             <ul className="flex flex-col w-full h-full gap-y-2 mb-12">
               {tasks.map((task, index) => (
                 <li key={index}>
-                  <TaskItem style={{ opacity: OPACITY[index] + '%' }} />
+                  <TaskItem style={{ opacity: OPACITY[index] + "%" }} />
                 </li>
               ))}
             </ul>
@@ -57,7 +58,7 @@ export function BoardCard({ board }: { board: { tasks: number[] } }) {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 export function NewBoardCard() {
@@ -70,5 +71,5 @@ export function NewBoardCard() {
         </div>
       </div>
     </button>
-  )
+  );
 }

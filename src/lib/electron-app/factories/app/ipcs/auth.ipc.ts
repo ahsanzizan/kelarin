@@ -1,26 +1,23 @@
-import { ipcMain } from 'electron'
+import { ipcMain } from "electron";
 import type {
   CredentialsPayload,
   IpcHandlerPayload,
   SessionSnapshot,
-} from 'shared/types'
-import {
-  getCurrentSession,
-  login,
-  logout,
-  register,
-} from '../services/auth.service'
+} from "shared/types";
+import { AuthService } from "../services/auth.service";
 
 export function registerAuthIpcHandlers() {
+  const authService = new AuthService();
+
   ipcMain.handle(
-    'auth:register',
+    "auth:register",
     async (
       _event,
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = register(payload)
-        return { ok: true, data }
+        const data = await authService.register(payload);
+        return { ok: true, data };
       } catch (error) {
         return {
           ok: false,
@@ -28,20 +25,20 @@ export function registerAuthIpcHandlers() {
             error instanceof Error
               ? error.message
               : "We couldn't finish that request. Please try again.",
-        }
+        };
       }
     }
-  )
+  );
 
   ipcMain.handle(
-    'auth:login',
+    "auth:login",
     async (
       _event,
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = login(payload)
-        return { ok: true, data }
+        const data = await authService.login(payload);
+        return { ok: true, data };
       } catch (error) {
         return {
           ok: false,
@@ -49,17 +46,17 @@ export function registerAuthIpcHandlers() {
             error instanceof Error
               ? error.message
               : "We couldn't finish that request. Please try again.",
-        }
+        };
       }
     }
-  )
+  );
 
   ipcMain.handle(
-    'auth:get-session',
+    "auth:get-session",
     async (): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = getCurrentSession()
-        return { ok: true, data }
+        const data = await authService.getCurrentSession();
+        return { ok: true, data };
       } catch (error) {
         return {
           ok: false,
@@ -67,17 +64,17 @@ export function registerAuthIpcHandlers() {
             error instanceof Error
               ? error.message
               : "We couldn't finish that request. Please try again.",
-        }
+        };
       }
     }
-  )
+  );
 
   ipcMain.handle(
-    'auth:logout',
+    "auth:logout",
     async (): Promise<IpcHandlerPayload<SessionSnapshot>> => {
       try {
-        const data = logout()
-        return { ok: true, data }
+        const data = await authService.logout();
+        return { ok: true, data };
       } catch (error) {
         return {
           ok: false,
@@ -85,8 +82,8 @@ export function registerAuthIpcHandlers() {
             error instanceof Error
               ? error.message
               : "We couldn't finish that request. Please try again.",
-        }
+        };
       }
     }
-  )
+  );
 }

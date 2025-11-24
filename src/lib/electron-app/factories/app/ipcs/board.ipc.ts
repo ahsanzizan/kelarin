@@ -1,15 +1,17 @@
-import { ipcMain } from 'electron'
-import type { Board } from 'main/database/schema'
-import type { IpcHandlerPayload } from 'shared/types'
-import { getBoards } from '../services/board.service'
+import { ipcMain } from "electron";
+import { BoardWithTasks } from "main/database/repositories/board.repository";
+import type { IpcHandlerPayload } from "shared/types";
+import { BoardService } from "../services/board.service";
 
 export function registerBoardIpcHandlers() {
+  const boardService = new BoardService();
+
   ipcMain.handle(
-    'board:getAll',
-    async (_event): Promise<IpcHandlerPayload<Board[]>> => {
+    "board:getAll",
+    async (_event): Promise<IpcHandlerPayload<BoardWithTasks[]>> => {
       try {
-        const data = getBoards()
-        return { ok: true, data }
+        const data = await boardService.getUserBoardsWithTasks();
+        return { ok: true, data };
       } catch (error) {
         return {
           ok: false,
@@ -17,8 +19,8 @@ export function registerBoardIpcHandlers() {
             error instanceof Error
               ? error.message
               : "We couldn't finish that request. Please try again.",
-        }
+        };
       }
     }
-  )
+  );
 }

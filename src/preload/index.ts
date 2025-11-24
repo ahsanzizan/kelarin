@@ -1,25 +1,15 @@
-import { contextBridge, ipcRenderer } from 'electron'
-import type { Board } from 'main/database/schema'
-import type { IpcHandlerPayload } from 'shared/types'
+import { contextBridge, ipcRenderer } from "electron";
+import type {
+  BoardWithTasks,
+  CredentialsPayload,
+  IpcHandlerPayload,
+  SessionSnapshot,
+} from "shared/types";
 
 declare global {
   interface Window {
-    App: typeof API
+    App: typeof API;
   }
-}
-
-type CredentialsPayload = {
-  username: string
-  password: string
-}
-
-type SessionSnapshot = {
-  isAuthenticated: boolean
-  user: {
-    id: number
-    username: string
-    createdAt: string
-  } | null
 }
 
 const API = {
@@ -27,11 +17,11 @@ const API = {
 
   // Screens
   screen: {
-    switchToStickyMode: () => ipcRenderer.send('switch-to-sticky-mode'),
-    switchToGeneralMode: () => ipcRenderer.send('switch-to-general-mode'),
-    minimize: () => ipcRenderer.send('window:minimize'),
-    maximize: () => ipcRenderer.send('window:maximize'),
-    close: () => ipcRenderer.send('window:close'),
+    switchToStickyMode: () => ipcRenderer.send("switch-to-sticky-mode"),
+    switchToGeneralMode: () => ipcRenderer.send("switch-to-general-mode"),
+    minimize: () => ipcRenderer.send("window:minimize"),
+    maximize: () => ipcRenderer.send("window:maximize"),
+    close: () => ipcRenderer.send("window:close"),
   },
 
   // Authentications
@@ -39,22 +29,22 @@ const API = {
     register: (
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-      ipcRenderer.invoke('auth:register', payload),
+      ipcRenderer.invoke("auth:register", payload),
     login: (
       payload: CredentialsPayload
     ): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-      ipcRenderer.invoke('auth:login', payload),
+      ipcRenderer.invoke("auth:login", payload),
     getSession: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-      ipcRenderer.invoke('auth:get-session'),
+      ipcRenderer.invoke("auth:get-session"),
     logout: (): Promise<IpcHandlerPayload<SessionSnapshot>> =>
-      ipcRenderer.invoke('auth:logout'),
+      ipcRenderer.invoke("auth:logout"),
   },
 
   // Boards
   boards: {
-    getAll: (): Promise<IpcHandlerPayload<Board[]>> =>
-      ipcRenderer.invoke('board:getAll'),
+    getAll: (): Promise<IpcHandlerPayload<BoardWithTasks[]>> =>
+      ipcRenderer.invoke("board:getAll"),
   },
-}
+};
 
-contextBridge.exposeInMainWorld('App', API)
+contextBridge.exposeInMainWorld("App", API);
